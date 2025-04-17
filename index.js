@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 3000;;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -16,13 +16,18 @@ app.post('/api/subscribe', async (req, res) => {
   }
 
   try {
+    // Create member data for Mailchimp
     const data = {
       email_address: email,
-      status: 'subscribed', 
+      status: 'subscribed', // Use 'pending' if you want double opt-in
     };
-    const API_KEY = '9362f880e6bc414c0687a634672b1cae-us18';
-    const AUDIENCE_ID = '415abfe0f9';
-    const API_SERVER = 'us18';
+
+    // Your Mailchimp API key
+    const API_KEY = process.env.MAILCHIMP_API_KEY;
+    // Your audience ID (also called List ID)
+    const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
+    // API server region (from your API key, like us6, us12, etc.)
+    const API_SERVER = process.env.MAILCHIMP_API_SERVER;
 
     const response = await fetch(
       `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`,
